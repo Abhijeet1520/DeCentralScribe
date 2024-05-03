@@ -125,7 +125,7 @@ function PostPage() {
         const postRefTemp = userDoc.ref.collection("posts").doc(slug);
         const post = postToJSON(await postRefTemp.get());
         setPost(post);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line 
         // @ts-expect-error
         setPostRef(postRefTemp);
       }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line 
 function PostItem({ post, admin }) {
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -45,7 +45,7 @@ function PostItem({ post, admin }) {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line 
 const PostFeed = ({ posts, admin }) => {
   if (!posts) {
     return null;
@@ -53,7 +53,7 @@ const PostFeed = ({ posts, admin }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/* eslint-disable-next-line  */}
       {posts.map((post) => (
         <PostItem post={post} key={post.slug} admin={admin} />
       ))}

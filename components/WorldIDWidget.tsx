@@ -1,16 +1,15 @@
 // Check if window is defined before importing
-if (typeof window !== 'undefined') {
-  // Import inside the conditional block to ensure it's executed only in the browser environment
-  window.global ||= window; // This line is now within the browser environment
-  import("react-indexed-db-hook").then(({ useIndexedDB }) => {
-    console.log("debug::useIndexedDB", useIndexedDB);
-  });
-}
+// if (typeof window !== 'undefined') {
+//   // Import inside the conditional block to ensure it's executed only in the browser environment
+//   window.global ||= window; // This line is now within the browser environment
+//   import("react-indexed-db-hook").then(({ useIndexedDB }) => {
+//     console.log("debug::useIndexedDB", useIndexedDB);
+//   });
+// }
 
 // Import other dependencies
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import { useEffect, useState } from "react";
-import { useIndexedDB } from "react-indexed-db-hook";
 
 // Define Props type
 type Props = {
@@ -27,17 +26,26 @@ export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
   // Check if window is defined
   const isBrowser = typeof window !== 'undefined';
 
-  // Define db variable conditionally
-  let db;
-  if (isBrowser) {
-    db = useIndexedDB('worldcoin');
-  }
+
 
   // Define state variables
   const [hasEntry, setHasEntry] = useState(false);
+  const [db, setDb] = useState(null);
 
   // Effect hook to fetch data from indexedDB
   useEffect(() => {
+
+    import("react-indexed-db-hook").then(({ useIndexedDB }) => {
+      console.log("debug::useIndexedDB", useIndexedDB);
+  
+        // Define db variable conditionally
+    let db;
+    if (isBrowser) {
+      db = useIndexedDB('worldcoin');
+    }
+  
+    });
+
     // Execute only in the browser environment
     if (isBrowser && db) {
       db.getAll().then((wc) => {
