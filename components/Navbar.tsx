@@ -75,7 +75,8 @@ function Navbar() {
               theme={"dark"}
               connectModal={{ size: "wide", showThirdwebBranding: false,}}
             />
-
+            </li>
+            <li>
             <WorldIdWidget signal="2024" />
             </li>
           </>
