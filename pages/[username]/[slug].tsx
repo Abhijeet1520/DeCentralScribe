@@ -37,26 +37,15 @@ function PostPage() {
     const descr = post.description;
     const cnftimg = post.imageUrl;
 
-
-    // call the contract with these FLIGHT_PARAMETERS
+    // call the contract with these parameters
+    
     // "name": "name ",
     // "description": descr,
     // "image": cnftimg,
-    // "attributes": [
-    //   {
-    //     "trait_type": "type",
-    //     "value": "supporters nft from SOlQuill"
-    //   },
-    //   {
-    //     "trait_type": "tag0",
-    //     "value": Tags[0],
-    //   },
-    //   {
-    //     "trait_type": "tag1",
-    //     "value": Tags[1],
-    //   }
-    // ],
-    // "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
+    //  "trait_type": "supporters nft",
+    //  "trait_type":  Tags[0],
+    //  "trait_type": Tags[1],
+    //  "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
   
   }
 
