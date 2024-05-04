@@ -9,7 +9,7 @@
 =============================================*/
 :root {
   --color-text: #eef0f1;
-  --color-bg: #08090a;
+  --color-bg: var(--bg-gray-800);
   --color-blue: #3b49df;
   --color-red: #df3b3b;
   --color-green: #3bdf72;
@@ -129,6 +129,10 @@ button[disabled] {
 button.btn-blue {
   background-color: var(--color-blue);
   color: white;
+}
+
+button.btn-blue:hover {
+  filter: brightness(90%);
 }
 
 button.btn-red {
