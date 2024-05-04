@@ -8,16 +8,16 @@ export default function PostContent({ post }) {
       : post.createdAt.toDate();
 
   return (
-    <div className="card">
-      <h1>{post?.title}</h1>
-      <span className="text-sm">
+    <div className="shadow-md rounded-md card">
+      <h1 className="text-xl font-bold mb-2">{post?.title}</h1>
+      <span className="text-sm text-gray-600">
         Written by{" "}
         <Link href={`/${post.username}/`} legacyBehavior>
-          <a className="text-info">@{post.username}</a>
+          <a className="text-blue-500">@{post.username}</a>
         </Link>{" "}
         on {createdAt.toISOString()}
       </span>
-      <ReactMarkdown>{post?.content}</ReactMarkdown>
+      <ReactMarkdown className="mt-4">{post?.content}</ReactMarkdown>
     </div>
   );
 }
