@@ -146,22 +146,18 @@ function PostPage() {
 
 
   return (
-    <main className={styles.container}>
-      <section>
+    <main className="flex flex-col items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 relative">
+      <section className="w-full">
         <PostContent post={finalPost} />
         {!showSupportModal && (
-          <>
-        <Modal onClose={toggleSupportModal}>
-          {/* @ts-ignore */}
-          <h2>Please support the author thr this modal</h2>
-
-
-        </Modal>
-        </>
+          <Modal onClose={toggleSupportModal}>
+            <h2 className="text-lg font-semibold mb-4">Please support the author through this modal</h2>
+            {/* Other modal content here */}
+          </Modal>
         )}
       </section>
-      <aside>
-      <div className="card">
+      <div className="fixed bottom-4 left-0 right-0 bg-gray-800 px-4 shadow-lg shadow-gray-800 w-[80%] max-w-3xl m-auto rounded-lg">
+        <div className="flex justify-between items-center mx-auto">
         <p>
           <span className="flex items-center">
             <strong>{finalPost?.heartCount || 0}</strong>
@@ -170,24 +166,27 @@ function PostPage() {
         </p>
         <AuthCheck
           fallback={
-            <Link href="/login" passHref>
-              <button>Sign Up</button>
+            <Link href="/enter" passHref>
+              <button className="btn-blue">Sign Up</button>
             </Link>
           }
         >
           {postRef && <HeartButton postRef={postRef} />}
         </AuthCheck>
-        <button type="button" onClick={toggleSupportModal} className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-vertically-centered-scrollable-modal">
-         Support the Author
-       </button>
-
-       <button type="button" onClick={mintSupportercNFT} className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-vertically-centered-scrollable-modal">
-         Mint the Supporter cNFT
-       </button>
-
-
+          <button
+            onClick={toggleSupportModal}
+            className="btn-blue"
+          >
+            Support the Author
+          </button>
+          <button
+            onClick={mintSupportercNFT}
+            className="btn-blue"
+          >
+            Mint Supporter cNFT
+          </button>
+        </div>
       </div>
-      </aside>
     </main>
   );
 }
