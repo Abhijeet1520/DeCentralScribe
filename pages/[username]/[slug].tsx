@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { FaHeart } from "react-icons/fa";
 interface IPost {
   heartCount?: number;
 }
@@ -66,7 +67,7 @@ function PostPage() {
     });
 
     console.log(raw,"raw")
-    
+
     var requestOptions = {
       method: 'POST',
       headers: {
@@ -76,14 +77,14 @@ function PostPage() {
       },
       body: raw,
     };
-    
+
     axios.post("https://api.shyft.to/sol/v1/metadata/create", requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .then(result => setMetadatauri(result!))
       .catch(error => console.log('error', error));
 
-  
+
 
     formData.append("network", 'devnet');
     formData.append("creator_wallet", addr);
@@ -91,7 +92,7 @@ function PostPage() {
     formData.append("metadata_uri", metadatauri);
     formData.append("fee_payer", addr!);
     formData.append("max_supply", '1');
-    
+
     axios.post('https://api.shyft.to/sol/v1/nft/compressed/mint', formData, {
       headers: {
         "x-api-key": `${process.env.NEXT_PUBLIC_SHYFT_API}`,
@@ -104,7 +105,7 @@ function PostPage() {
         const encodedTransaction =response.data.result.encoded_transaction;
         toast.success("Transaction generated successfully");
 
-       
+
         (async () => {
           try {
 
@@ -126,7 +127,7 @@ function PostPage() {
         const postRefTemp = userDoc.ref.collection("posts").doc(slug);
         const post = postToJSON(await postRefTemp.get());
         setPost(post);
-        // eslint-disable-next-line 
+        // eslint-disable-next-line
 
         setPostRef(postRefTemp);
       }
@@ -154,7 +155,7 @@ function PostPage() {
           {/* @ts-ignore */}
           <h2>Please support the author thr this modal</h2>
 
-          
+
         </Modal>
         </>
         )}
@@ -162,7 +163,10 @@ function PostPage() {
       <aside>
       <div className="card">
         <p>
-          <strong>{finalPost?.heartCount || 0} ❤️</strong>
+          <span className="flex items-center">
+            <strong>{finalPost?.heartCount || 0}</strong>
+            <FaHeart color="red" className="ml-2" />
+          </span>
         </p>
         <AuthCheck
           fallback={

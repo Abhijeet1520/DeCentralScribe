@@ -20,7 +20,7 @@ export default function Home() {
         .limit(3);
 
       const newPosts = (await postsQuery.get()).docs.map(postToJSON);
-      // eslint-disable-next-line 
+      // eslint-disable-next-line
       setPosts(newPosts);
       setIsLoading(false);
     };
@@ -31,7 +31,7 @@ export default function Home() {
   const getMorePosts = async () => {
     setIsLoading(true);
     const last = posts[posts.length - 1];
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     const cursor = typeof last.createdAt === "number" ? fromMillis(last.createdAt) : last.createdAt;
 
     const query = firestore
@@ -42,7 +42,7 @@ export default function Home() {
       .limit(LIMIT);
 
     const newPosts = (await query.get()).docs.map((doc) => doc.data());
-  // eslint-disable-next-line 
+  // eslint-disable-next-line
     setPosts(posts.concat(newPosts));
     setIsLoading(false);
 
