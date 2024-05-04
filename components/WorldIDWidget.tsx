@@ -1,13 +1,3 @@
-// Check if window is defined before importing
-// if (typeof window !== 'undefined') {
-//   // Import inside the conditional block to ensure it's executed only in the browser environment
-//   window.global ||= window; // This line is now within the browser environment
-//   import("react-indexed-db-hook").then(({ useIndexedDB }) => {
-//     console.log("debug::useIndexedDB", useIndexedDB);
-//   });
-// }
-
-// Import other dependencies
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import { useEffect, useState } from "react";
 
@@ -26,33 +16,23 @@ export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
   // Check if window is defined
   const isBrowser = typeof window !== 'undefined';
 
-
-
-  // Define state variables
+  // Define state variable to track if the user has an entry in indexedDB
   const [hasEntry, setHasEntry] = useState(false);
-  const [db, setDb] = useState(null);
 
-  // Effect hook to fetch data from indexedDB
   useEffect(() => {
-
+    // Asynchronously import useIndexedDB hook
     import("react-indexed-db-hook").then(({ useIndexedDB }) => {
-      console.log("debug::useIndexedDB", useIndexedDB);
-  
-        // Define db variable conditionally
-    let db;
-    if (isBrowser) {
-      db = useIndexedDB('worldcoin');
-    }
-  
-    });
+      // Use useIndexedDB hook directly inside the component
+      const db = isBrowser ? useIndexedDB('worldcoin') : null;
 
-    // Execute only in the browser environment
-    if (isBrowser && db) {
-      db.getAll().then((wc) => {
-        setHasEntry(wc.length > 0);
-      });
-    }
-  }, [isBrowser, db]);
+      // Execute only in the browser environment
+      if (isBrowser && db) {
+        db.getAll().then((wc) => {
+          setHasEntry(wc.length > 0);
+        });
+      }
+    });
+  }, [isBrowser]);
 
   // Conditional rendering based on whether the user has already verified
   if (hasEntry) {
@@ -69,10 +49,16 @@ export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
         console.log("debug::onSuccess", JSON.stringify(proofResult));
         const { proof, merkle_root, nullifier_hash } = proofResult;
 
-        // Add the proof to indexedDB
-        if (isBrowser && db) {
-          db.add({ proof, merkle_root, nullifier_hash });
-        }
+        // Asynchronously import useIndexedDB hook
+        import("react-indexed-db-hook").then(({ useIndexedDB }) => {
+          // Use useIndexedDB hook directly inside the component
+          const db = isBrowser ? useIndexedDB('worldcoin') : null;
+
+          // Add the proof to indexedDB
+          if (isBrowser && db) {
+            db.add({ proof, merkle_root, nullifier_hash });
+          }
+        });
       }}
       handleVerify={(proof) => {
         console.log("debug::handleVerify", JSON.stringify(proof));
