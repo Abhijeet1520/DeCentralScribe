@@ -52,13 +52,8 @@ function Navbar() {
         <div className="flex items-center space-x-4">
           {username && (
             <>
-              <button
-                className="text-white p-3 lg:hidden"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <FaBars />
-              </button>
-              <ul className={`flex items-center space-x-4 ${isMenuOpen ? 'flex-col' : 'hidden lg:flex'}`}>
+              <ul className={"flex items-center space-x-4 md:flex"+
+              ` ${isMenuOpen ? 'flex-col items-center' : 'hidden md:flex'}`}>
                 <li>
                   <button onClick={signOut} className="btn-red text-white p-3">
                     Sign Out
@@ -91,6 +86,12 @@ function Navbar() {
                 </li>
               </ul>
 
+              <button
+                className="text-white p-3 md:text-xl md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <FaBars width={100}/>
+              </button>
             </>
           )}
           {!username && (
