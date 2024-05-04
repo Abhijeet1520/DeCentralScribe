@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { FaHeart, FaCoins } from "react-icons/fa";
+import { FaHeart, FaCoins, FaMoneyBillWave } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
 import { GateFiSDK } from "@gatefi/js-sdk";
 
@@ -21,6 +21,7 @@ interface IPost {
 function PostPage() {
   const [post, setPost] = useState(null);
   const [postRef, setPostRef] = useState(null);
+  const [instanceCreated, setInstanceCreated] = useState(false);
   const [instance, setInstance] = useState(null);
 
   const router = useRouter();
@@ -64,13 +65,6 @@ function PostPage() {
   }
 
   console.log(username, slug)
-  useEffect(() => {
-    const instance = new GateFiSDK({
-      merchantId: process.env.NEXT_PUBLIC_UNLIMIT_MERCHANT_ID,
-      displayMode: "overlay",
-    });
-    setInstance(instance);
-  }, []);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -98,12 +92,21 @@ function PostPage() {
     return <div>Loading...</div>; // Or any other loading state
   }
 
-  function loadUnLimit() {
-    instance.show();
+  function showUnLimit() {
+    if (!instanceCreated){
+      var new_instance = new GateFiSDK({
+        merchantId: process.env.NEXT_PUBLIC_UNLIMIT_MERCHANT_ID,
+        displayMode: "overlay",
+      });
+      setInstance(new_instance);
+      setInstanceCreated(true);
+    }
+
+    instance?.show();
   }
 
   return (
-    <main className="flex flex-col items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 relative">
+    <main className="flex flex-col items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 relative pb-20">
       <section className="w-full">
         <PostContent post={finalPost} />
         {!showSupportModal && (
@@ -113,7 +116,7 @@ function PostPage() {
           </Modal>
         )}
       </section>
-      <div className="fixed bottom-4 left-0 right-0 bg-gray-800 px-4 shadow-lg shadow-gray-800 w-[80%] max-w-3xl m-auto rounded-lg">
+      <div className="fixed bottom-4 left-0 right-0 bg-gray-800 px-4 shadow-lg shadow-gray-800 w-auto max-w-[90%] m-auto rounded-lg">
         <div className="flex justify-between items-center mx-auto">
         <p>
           <span className="flex items-center">
@@ -124,7 +127,7 @@ function PostPage() {
         <AuthCheck
           fallback={
             <Link href="/enter" passHref>
-              <button className="btn-blue">Sign Up</button>
+              <button className="btn-blue m-3 p-3">Sign Up</button>
             </Link>
           }
         >
@@ -132,17 +135,30 @@ function PostPage() {
         </AuthCheck>
           <button
             onClick={toggleSupportModal}
-            className="btn-blue"
+            className="btn-blue text-xs xl:text-sm sm:p-3 md:p-4"
           >
-            <FaGift className="mr-2" />
-            Support the Author
+            <FaGift className="sm:mr-2" />
+            <span className="hidden sm:inline">
+              Support the Author
+            </span>
+          </button>
+          <button
+            onClick={showUnLimit}
+            className="btn-blue text-xs xl:text-sm sm:p-3 md:p-4"
+          >
+            <FaMoneyBillWave className="sm:mr-2" />
+            <span className="hidden sm:inline">
+              Use UnLimit
+            </span>
           </button>
           <button
             onClick={mintSupportercNFT}
-            className="btn-blue"
+            className="btn-blue text-xs lg:text-sm sm:p-3 md:p-4"
           >
-            <FaCoins className="mr-2" />
-            Mint Supporter cNFT
+            <FaCoins className="sm:mr-2" />
+            <span className="hidden sm:inline">
+              Mint Supporter cNFT
+            </span>
           </button>
         </div>
       </div>

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gatefi/js-sdk": "^0.18.0",
     "@worldcoin/idkit": "^1.2.0",
     "axios": "^1.6.8",
     "daisyui": "^4.10.3",
