@@ -1,6 +1,6 @@
 // @ts-nocheck
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { UserContext } from "../lib/context";
@@ -21,6 +21,7 @@ function Navbar() {
   const { username, user } = useContext(UserContext);
 
   const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const signOut = () => {
     auth.signOut();
@@ -48,49 +49,56 @@ function Navbar() {
         <Link href="/">
           <button className="btn-logo">DBLOG</button>
         </Link>
-        <ul className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4">
           {username && (
             <>
-              <li>
-                <button onClick={signOut} className="btn-red text-white p-3">
-                  Sign Out
-                </button>
-              </li>
-              <li>
-                <Link href="/admin">
-                  <button className="btn-blue p-3">Write Posts</button>
-                </Link>
-              </li>
-              <li>
-                <Link href={`/${username}`}>
-                  <img
-                    src={user?.photoURL}
-                    alt={user?.photoURL}
-                    className="h-8 w-8 rounded-full"
+              <button
+                className="text-white p-3 lg:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <FaBars />
+              </button>
+              <ul className={`flex items-center space-x-4 ${isMenuOpen ? 'flex-col' : 'hidden lg:flex'}`}>
+                <li>
+                  <button onClick={signOut} className="btn-red text-white p-3">
+                    Sign Out
+                  </button>
+                </li>
+                <li>
+                  <Link href="/admin">
+                    <button className="btn-blue p-3">Write Posts</button>
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/${username}`}>
+                    <img
+                      src={user?.photoURL}
+                      alt={user?.photoURL}
+                      className="h-12 w-12 rounded-full"
+                    />
+                  </Link>
+                </li>
+                <li>
+                  <ConnectButton
+                    client={client}
+                    wallets={wallets}
+                    theme={"dark"}
+                    connectModal={{ size: "wide", showThirdwebBranding: false }}
                   />
-                </Link>
-              </li>
-              <li>
-                <ConnectButton
-                  client={client}
-                  wallets={wallets}
-                  theme={"dark"}
-                  connectModal={{ size: "wide", showThirdwebBranding: false }}
-                />
-              </li>
-              <li>
-                <WorldIdWidget signal="2024" />
-              </li>
+                </li>
+                <li>
+                  <WorldIdWidget signal="2024" />
+                </li>
+              </ul>
+
             </>
           )}
           {!username && (
-            <li>
-              <Link href="/enter">
-                <button className="btn-blue">Login</button>
-              </Link>
-            </li>
+            <Link href="/enter">
+              <button className="btn-blue">Login</button>
+            </Link>
           )}
-        </ul>
+        </div>
       </div>
     </nav>
   );
