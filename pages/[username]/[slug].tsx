@@ -3,13 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthCheck, HeartButton, PostContent } from "../../components";
-import { firestore, getUserWithUsername, postToJSON } from "../../lib/firebase";
+import { getUserWithUsername, postToJSON } from "../../lib/firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import styles from "../../styles/Post.module.css";
 import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
-import toast from "react-hot-toast";
-import axios from "axios";
 import { FaHeart, FaCoins, FaMoneyBillWave } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
 import { GateFiSDK } from "@gatefi/js-sdk";
@@ -29,11 +26,8 @@ function PostPage() {
   const slug = router.query.slug;
 
   const [showSupportModal, setShowSupportModal] = useState(true); // State to control the support modal visibility
-  console.log(showSupportModal,"showsupport")
 
   const toggleSupportModal = () => setShowSupportModal(!showSupportModal);
-
-  console.log(username, slug)
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -86,7 +80,7 @@ function PostPage() {
         )}
       </section>
       <div className="fixed bottom-4 left-0 right-0 bg-gray-800 px-4 shadow-lg shadow-gray-800 w-auto max-w-[90%] m-auto rounded-lg">
-        <div className="flex justify-between items-center mx-auto">
+        <div className="flex gap-x-8 justify-center items-center mx-auto">
         <p>
           <span className="flex items-center">
             <strong>{finalPost?.heartCount || 0}</strong>

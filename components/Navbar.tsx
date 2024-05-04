@@ -44,7 +44,7 @@ function Navbar() {
   ];
 
   return (
-    <nav className="bg-gray-800 py-4 sticky top-0 z-[999]">
+    <nav className="bg-gray-800 py-4 sticky top-0 z-[9]">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
         <Link href="/">
           <button className="btn-logo">DeCentralScribe</button>
