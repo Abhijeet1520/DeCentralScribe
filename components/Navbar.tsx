@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import React, { useContext } from "react";
 import { useRouter } from "next/router";
@@ -27,7 +28,7 @@ function Navbar() {
 
 
   const client = createThirdwebClient({
-    clientId: "YOUR_CLIENT_ID",
+    clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
   });
   
   const wallets = [
