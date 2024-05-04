@@ -46,13 +46,13 @@ function Navbar() {
   return (
     <nav className="bg-gray-800 py-4 sticky top-0 z-[9]">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        <Link href="/">
+        <Link href="/" className="mb-auto">
           <button className="btn-logo">DeCentralScribe</button>
         </Link>
-        <div className="flex items-center space-x-4">
+        <div className="flex md:items-center space-x-4 items-start">
           {username && (
             <>
-              <ul className={"flex items-center space-x-4 md:flex"+
+              <ul className={"flex items-center space-x-4 md:flex flex-col md:flex-row"+
               ` ${isMenuOpen ? 'flex-col items-center' : 'hidden md:flex'}`}>
                 <li>
                   <button onClick={signOut} className="btn-red text-white p-3">
@@ -87,7 +87,7 @@ function Navbar() {
               </ul>
 
               <button
-                className="text-white p-3 md:text-xl md:hidden"
+                className="text-white p-3 md:text-xl md:hidden mb-auto"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 <FaBars width={100}/>
