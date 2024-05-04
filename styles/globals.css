@@ -24,7 +24,6 @@ body {
   font-family: "Noto Sans", sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
-  margin-top: 50px;
 }
 
 main {
@@ -74,44 +73,6 @@ code {
   overflow-x: scroll;
 }
 
-/* Navbar */
-
-/* Navbar */
-.navbar {
-  height: 70px;
-  width: 100%;
-  background-color: var(--color-bg); /* Changed background color */
-  color: var(--color-text);
-  position: fixed;
-  top: 0;
-  left: 0; /* Added to align with the left side of the viewport */
-  right: 0; /* Added to align with the right side of the viewport */
-  padding: 0 10vw;
-  font-weight: bold;
-  border-bottom: 1px solid var(--color-gray);
-  z-index: 99;
-}
-
-.navbar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.navbar img {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-}
-
-.navbar li {
-  margin-left: 1rem; /* Adjusted spacing between navbar items */
-}
 
 /* Buttons */
 .btn,

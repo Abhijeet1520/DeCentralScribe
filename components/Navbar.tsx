@@ -6,6 +6,7 @@ import Link from "next/link";
 import { UserContext } from "../lib/context";
 import { auth } from "../lib/firebase";
 
+import { FaBars } from "react-icons/fa";
 import { sepolia } from "thirdweb/chains";
 import {
   createWallet,
@@ -26,70 +27,71 @@ function Navbar() {
     router.reload();
   };
 
-
   const client = createThirdwebClient({
     clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID,
   });
-  
+
   const wallets = [
     createWallet("io.metamask"),
     createWallet("com.coinbase.wallet"),
     walletConnect(),
     inAppWallet({
       auth: {
-        options: [
-          "email",
-          "google",
-        ],
+        options: ["email", "google"],
       },
     }),
   ];
-  
 
   return (
-    <nav className="navbar">
-      <ul>
-        <li>
-          <Link href="/">
-            <button className="btn-logo">DBLOG</button>
-          </Link>
-        </li>
-        {username && (
-          <>
-            <li className="push-left">
-              <button onClick={signOut}>Sign Out</button>
-            </li>
+    <nav className="bg-gray-800 py-4 sticky top-0 z-[999999]">
+      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+        <Link href="/">
+          <button className="btn-logo">DBLOG</button>
+        </Link>
+        <ul className="flex items-center space-x-4">
+          {username && (
+            <>
+              <li>
+                <button onClick={signOut} className="btn-red text-white p-3">
+                  Sign Out
+                </button>
+              </li>
+              <li>
+                <Link href="/admin">
+                  <button className="btn-blue p-3">Write Posts</button>
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${username}`}>
+                  <img
+                    src={user?.photoURL}
+                    alt={user?.photoURL}
+                    className="h-8 w-8 rounded-full"
+                  />
+                </Link>
+              </li>
+              <li>
+                <ConnectButton
+                  client={client}
+                  wallets={wallets}
+                  theme={"dark"}
+                  connectModal={{ size: "wide", showThirdwebBranding: false }}
+                />
+              </li>
+              <li>
+                <WorldIdWidget signal="2024" />
+              </li>
+            </>
+          )}
+          {!username && (
             <li>
-              <Link href="/admin">
-                <button className="btn-blue">Write Posts</button>
+              <Link href="/enter">
+                <button className="btn-blue">Login</button>
               </Link>
             </li>
-            <li>
-              <Link href={`/${username}`}>
-                <img src={user?.photoURL} alt={user?.photoURL} />
-              </Link>
-            </li>
-            <li>
-            <ConnectButton
-              client={client}
-              wallets={wallets}
-              theme={"dark"}
-              connectModal={{ size: "wide", showThirdwebBranding: false,}}
-            />
-            </li>
-            <li>
-            <WorldIdWidget signal="2024" />
-            </li>
-          </>
-        )}
-        {!username && (
-          <li>
-            <Link href="/enter">
-              <button className="btn-blue">Login</button>
-            </Link>
-          </li>
-        )}
-      </ul>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 }
