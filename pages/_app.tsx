@@ -34,9 +34,7 @@ function MyApp({ Component, pageProps }) {
   const userData = useUserData();
 
   return (
-    <ThirdwebProvider 
-    
-    >
+    <ThirdwebProvider>
     <UserContext.Provider value={userData}>
       <Navbar />
       <Component {...pageProps} />
