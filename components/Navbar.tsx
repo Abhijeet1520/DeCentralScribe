@@ -51,7 +51,7 @@ function Navbar() {
       <ul>
         <li>
           <Link href="/">
-            <button className="btn-logo">DBLOG</button>
+            <button className="btn-logo">DSCRIBE</button>
           </Link>
         </li>
         {username && (

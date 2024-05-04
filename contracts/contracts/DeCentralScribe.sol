@@ -5,11 +5,8 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./DonationAggregator.sol";
 import "./AccessControl.sol";
-
 import "./IdTracker.sol";
 import "./TokenUtils.sol";
-
-// This is the main contract , supporters can mint tokens for articles in the form of ERC1155 tokens of those articles.
 
 contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, TokenUtils, AccessControl {
     uint256 constant MAX_ARTICLE_ID = 1 << (96 - 1);
@@ -17,7 +14,18 @@ contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, Tok
     uint256 public mintPrice;
     address public tokenReceiver; // the address that can call mintErc20
 
+    struct ArticleMetadata {
+        string title;
+        string imageURL;
+        string description;
+        string[] attributes;
+    }
+
+    mapping(uint256 => ArticleMetadata) public articleMetadata;
+
     mapping(uint => bool) public tokensTracker;
+
+    event ArticleMinted(address indexed creator, uint256 indexed articleId, uint256 tokenId);
 
     constructor(
         address initialOwner,
@@ -31,112 +39,55 @@ contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, Tok
         AccessControl(accessController)
     {
         tokenReceiver = _tokenReceiver;
-
-        // price is in wei
         mintPrice = _mintPrice;
     }
-
-    /*
-    string private _uri;
-
-    function uri(uint256 id) override public view returns (string memory) {
-        string memory stringId = string(abi.encode(id));
-        return string(abi.encodePacked(_uri, stringId));
-    }
-    */
 
     function setURI(string memory newuri) public onlyOwner {
         _setURI(newuri);
     }
 
-    error Unauthorized();
-    error Never();
-
-    error AlreadyOwned(address minter, uint tokenId);
-    error OnlyMintOne();
-    error InvalidFunds(uint fundsSent, uint fundsRequired);
-    error ArticleIdTooBig(uint maxId, uint requestedId);
-    error ArticleIdNonSequential(uint invalidArticleId, uint requiredArticleId);
-
-    error TokenIdNotExist(uint requestedTokenId);
-    error ArticleIdNotExist(uint requested, uint maxAvailable);
-    error NoArticlesByAuthor(address author);
-
     function mintErc20(
         address minter,
         uint256 tokenId,
         uint256 paymentAmount,
-        bytes calldata data
+        string memory title,
+        string memory imageURL,
+        string memory description,
+        string[] memory attributes
     ) external {
-        // only the CCIP receiver can call this after recievign payment
-        if (msg.sender != tokenReceiver) {
-            revert Unauthorized();
-        }
+        require(accessStatusTracker[minter] == AccessStatus.Authorized, "Minter not authorized");
 
-        if (accessStatusTracker[minter] != AccessStatus.Authorized) {
-            revert NotAllowedAccess(minter);
-        }
+        (address creator, uint articleId, bool isPaying) = parseTokenId(tokenId);
 
-        (address creator, uint articleId, bool isPaying) = parseTokenId(
-            tokenId
-        );
-
-        // need IERC1155-supply here, to check if it's a preexisting article?
-        // definitely can simplify tracking
-
-        // first branch: minter is a match with creator
         if (creator == minter) {
-            // check if this is a valid ID to mint, aka is it a new article?
-            if (!isValidId(creator, articleId)) {
-                revert ArticleIdNonSequential(articleId, idTracker[creator]);
-            }
-
-            // it's valid, mint to author
+            require(isValidId(creator, articleId), "Invalid article ID to mint");
             incrementTrackedId(creator);
             tokensTracker[tokenId] = true;
             _mint(minter, tokenId, 1, new bytes(0));
+            articleMetadata[tokenId] = ArticleMetadata(title, imageURL, description, attributes);
+            emit ArticleMinted(minter, articleId, tokenId);
         } else {
-            // a common user is minting a token for an article
-            // check if the article actually exists
-            if (idTracker[creator] == 0) {
-                revert NoArticlesByAuthor(creator);
-            }
+            require(idTracker[creator] > 0, "No articles by this author");
+            require(articleId < idTracker[creator], "Invalid article ID");
 
-            if (articleId >= idTracker[creator]) {
-                revert ArticleIdNotExist(articleId, idTracker[creator] - 1);
-            }
+            require(tokensTracker[tokenId], "Token ID does not exist");
 
-            // need to check if is minting the right isPaying type of article
-            // can just check balance of author? really need to go through ERC-1155 supply
-            if (tokensTracker[tokenId] == false) {
-                revert TokenIdNotExist(tokenId);
-            }
-
-            // if it's an article with paid access
             if (isPaying) {
-                if (paymentAmount != mintPrice) {
-                    revert InvalidFunds(paymentAmount, mintPrice);
-                } else {
-                    // payment is a-ok, can mint
-                }
-
+                require(paymentAmount == mintPrice, "Invalid payment amount");
                 aggregated[creator] += paymentAmount;
                 _mint(minter, tokenId, 1, new bytes(0));
+                emit ArticleMinted(minter, articleId, tokenId);
             } else {
-                // free article, the user is supporting the author here
                 aggregated[creator] += paymentAmount;
                 _mint(minter, tokenId, 1, new bytes(0));
+                emit ArticleMinted(minter, articleId, tokenId);
             }
         }
     }
 
     function withdraw() public {
         uint256 amount = aggregated[msg.sender];
-
-        if (amount == 0) {
-            revert("No funds to withdraw");
-        } else {
-            _withdraw(msg.sender, amount, tokenReceiver);
-        }
+        require(amount > 0, "No funds to withdraw");
+        _withdraw(msg.sender, amount, tokenReceiver);
     }
 }

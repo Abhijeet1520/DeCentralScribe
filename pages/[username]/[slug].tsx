@@ -22,97 +22,39 @@ function PostPage() {
   const username = router.query.username;
   const slug = router.query.slug;
 
-  const addr = "6cVCyRQhd2oZoVukbmngTuXSBtoogHR4NLsgQhydMU1R";
-  const [metadatauri,setMetadatauri] = useState("");
   const [showSupportModal, setShowSupportModal] = useState(true); // State to control the support modal visibility
   console.log(showSupportModal,"showsupport")
 
   const toggleSupportModal = () => setShowSupportModal(!showSupportModal);
 
   async function mintSupportercNFT() {
-    const formData = new FormData();
     const Tags = post.tags;
 
     console.log(Tags,"tags")
     const descr = post.description;
     const cnftimg = post.imageUrl;
-    console.log(cnftimg,"img")
 
 
-    var raw = JSON.stringify({
-      "name": "SOLQUILL Supporters NFT",
-      "symbol": "SOLQUILL SNFT",
-      "description": descr,
-      "image": cnftimg,
-      "attributes": [
-        {
-          "trait_type": "type",
-          "value": "supporters nft from SOlQuill"
-        },
-        {
-          "trait_type": "tag0",
-          "value": Tags[0],
-        },
-        {
-          "trait_type": "tag1",
-          "value": Tags[1],
-        }
-      ],
-      "royalty": 5,
-      "creator": addr,
-      "share": 100,
-      "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
-      "files": []
-    });
-
-    console.log(raw,"raw")
-    
-    var requestOptions = {
-      method: 'POST',
-      headers: {
-        "x-api-key": `${process.env.NEXT_PUBLIC_SHYFT_API}`,
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: raw,
-    };
-    
-    axios.post("https://api.shyft.to/sol/v1/metadata/create", requestOptions)
-      .then(response => response.text())
-      .then(result => console.log(result))
-      .then(result => setMetadatauri(result!))
-      .catch(error => console.log('error', error));
-
+    // call the contract with these FLIGHT_PARAMETERS
+    // "name": "name ",
+    // "description": descr,
+    // "image": cnftimg,
+    // "attributes": [
+    //   {
+    //     "trait_type": "type",
+    //     "value": "supporters nft from SOlQuill"
+    //   },
+    //   {
+    //     "trait_type": "tag0",
+    //     "value": Tags[0],
+    //   },
+    //   {
+    //     "trait_type": "tag1",
+    //     "value": Tags[1],
+    //   }
+    // ],
+    // "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
   
-
-    formData.append("network", 'devnet');
-    formData.append("creator_wallet", addr);
-    formData.append("merkle_tree", "AypA8d5MJBp9SV7DRsdrt8g5dWyY3Ji44tPKAgvYBwmc")
-    formData.append("metadata_uri", metadatauri);
-    formData.append("fee_payer", addr!);
-    formData.append("max_supply", '1');
-    
-    axios.post('https://api.shyft.to/sol/v1/nft/compressed/mint', formData, {
-      headers: {
-        "x-api-key": `${process.env.NEXT_PUBLIC_SHYFT_API}`,
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    })
-      .then(response => {
-        console.log(response.data);
-        const encodedTransaction =response.data.result.encoded_transaction;
-        toast.success("Transaction generated successfully");
-
-       
-        (async () => {
-          try {
-
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-      })
   }
 
   console.log(username, slug)

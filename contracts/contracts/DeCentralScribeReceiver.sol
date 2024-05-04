@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@chainlink/contracts-ccip/src/v0.8/shared/access/OwnerIsCreator.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
-import {IERC677Receiver} from "@chainlink/contracts-ccip/src/v0.8/shared/token/ERC677/IERC677Receiver.sol";
+import {IERC677} from "@chainlink/contracts-ccip/src/v0.8/shared/token/ERC677/IERC677.sol";
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
@@ -20,7 +20,7 @@ import {IRelayTransferERC20} from "./Interfaces/IRelayTransferErc20.sol";
 contract DeCentralScribeReceiver is
     CCIPReceiver,
     OwnerIsCreator,
-    IERC677Receiver,
+    IERC677,
     IRelayTransferERC20
 {
     DeCentralScribe public target;
@@ -81,5 +81,9 @@ contract DeCentralScribeReceiver is
     function transferTokens(address beneficiary, uint256 amount) external {
         require(msg.sender == address(target), "Unauthorized");
         ERC20(paymentToken).transfer(beneficiary, amount);
+    }
+
+    function transferAndCall(to, amount, data) external override returns (bool) {
+        return IERC677(paymentToken).transferAndCall(to, amount, data);
     }
 }
