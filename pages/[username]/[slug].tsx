@@ -10,7 +10,9 @@ import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaCoins } from "react-icons/fa";
+import { FaGift } from "react-icons/fa6";
+
 interface IPost {
   heartCount?: number;
 }
@@ -177,12 +179,14 @@ function PostPage() {
             onClick={toggleSupportModal}
             className="btn-blue"
           >
+            <FaGift className="mr-2" />
             Support the Author
           </button>
           <button
             onClick={mintSupportercNFT}
             className="btn-blue"
           >
+            <FaCoins className="mr-2" />
             Mint Supporter cNFT
           </button>
         </div>
