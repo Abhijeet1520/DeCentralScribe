@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import { useEffect, useState } from "react";
 
