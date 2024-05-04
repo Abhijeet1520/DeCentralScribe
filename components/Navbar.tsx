@@ -47,7 +47,7 @@ function Navbar() {
     <nav className="bg-gray-800 py-4 sticky top-0 z-[999]">
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
         <Link href="/">
-          <button className="btn-logo">DBLOG</button>
+          <button className="btn-logo">DeCentralScribe</button>
         </Link>
         <div className="flex items-center space-x-4">
           {username && (

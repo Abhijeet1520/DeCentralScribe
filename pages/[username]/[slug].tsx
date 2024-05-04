@@ -33,26 +33,6 @@ function PostPage() {
 
   const toggleSupportModal = () => setShowSupportModal(!showSupportModal);
 
-
-  async function mintSupportercNFT() {
-    const Tags = post.tags;
-
-    console.log(Tags,"tags")
-    const descr = post.description;
-    const cnftimg = post.imageUrl;
-
-    // call the contract with these parameters
-    
-    // "name": "name ",
-    // "description": descr,
-    // "image": cnftimg,
-    //  "trait_type": "supporters nft",
-    //  "trait_type":  Tags[0],
-    //  "trait_type": Tags[1],
-    //  "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
-  
-  }
-
   console.log(username, slug)
 
   useEffect(() => {
@@ -138,15 +118,6 @@ function PostPage() {
             <FaMoneyBillWave className="sm:mr-2" />
             <span className="hidden sm:inline">
               Use UnLimit
-            </span>
-          </button>
-          <button
-            onClick={mintSupportercNFT}
-            className="btn-blue text-xs lg:text-sm sm:p-3 md:p-4"
-          >
-            <FaCoins className="sm:mr-2" />
-            <span className="hidden sm:inline">
-              Mint Supporter cNFT
             </span>
           </button>
         </div>

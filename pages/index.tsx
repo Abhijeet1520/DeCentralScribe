@@ -9,6 +9,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
+ 
 
   useEffect(() => {
     const fetchPosts = async () => {

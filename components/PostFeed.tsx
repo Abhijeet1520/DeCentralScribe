@@ -10,7 +10,7 @@ function PostItem({ post, admin }) {
     <article className="rounded-lg shadow-md dark:bg-gray-800">
       <div className="relative h-48 overflow-hidden rounded-t-lg">
         <img
-          src={`https://source.unsplash.com/random?cool-article-background${Math.floor(Math.random() * (100))}`}
+          src={post?.imageUrl}
           alt="Blog post image"
           width="400"
           height="300"
