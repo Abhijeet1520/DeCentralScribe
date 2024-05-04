@@ -18,7 +18,7 @@ function PostItem({ post, admin }) {
           style={{ aspectRatio: "400 / 300", objectFit: "cover" }}
         />
       </div>
-      <div className="p-4">
+      <div className="px-4">
         <h2 className="mb-2 text-xl font-bold">
           <Link href={!admin ? `/${post.username}/${post.slug}` : `/admin/${post.slug}`} legacyBehavior>
             <h2 className="mt-2 text-xl hover:text-blue-500 dark:hover:text-blue-400">
@@ -51,13 +51,15 @@ function PostItem({ post, admin }) {
           </div>
         )}
         <div className="flex justify-between">
-          <button className="font-medium gap-2 hover:bg-accent items-center px-4 rounded-md text-sm transition-colors">
+          <button className="font-medium gap-2 hover:bg-blue-500 items-center px-4 rounded-md text-sm transition-colors">
             <FaRegHeart className="h-4 w-4" />
             <span>{post.heartCount} likes</span>
           </button>
-          <a className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500" href="#">
-            Read more
-          </a>
+          <div className="font-medium gap-2 items-center px-4 rounded-md text-sm transition-colors flex">
+            <a className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-500" href="#">
+              Read more
+            </a>
+          </div>
         </div>
       </div>
     </article>
