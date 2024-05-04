@@ -29,7 +29,7 @@ const HeartButton = ({ postRef }) => {
 
   return heartDoc?.exists ? (
     <button className="btn-blue" onClick={removeHeart} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      {isHovered ? <><FaHeartBroken color="red" className="mr-2" /> Unheart</> : <><FaHeart color="red" className="mr-2" /> Heart</>}
+      {isHovered ? <><FaHeartBroken color="red" className="mr-2" /> Unheart</> : <><FaHeart color="red" className="mr-2" /> Hearted</>}
     </button>
   ) : (
     <button className="btn-blue" onClick={addHeart}>
