@@ -5,22 +5,18 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@chainlink/contracts-ccip/src/v0.8/shared/access/OwnerIsCreator.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
-import {IERC677} from "@chainlink/contracts-ccip/src/v0.8/shared/token/ERC677/IERC677.sol";
+import {IERC677Receiver} from "@chainlink/contracts-ccip/src/v0.8/shared/token/ERC677/IERC677Receiver.sol";
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-
-import "./DeCentralScribe.sol";
+import {DeCentralScribe} from "./DeCentralScribe.sol";
 import {IRelayTransferERC20} from "./Interfaces/IRelayTransferErc20.sol";
 
-/*
-    Entrypoint for payments to DeCentralScribe. 
-    We'll use this simply as a relayer, and leave the checks to the DeCentralScribe contract
-*/
+
 contract DeCentralScribeReceiver is
     CCIPReceiver,
     OwnerIsCreator,
-    IERC677,
+    IERC677Receiver,
     IRelayTransferERC20
 {
     DeCentralScribe public target;
@@ -35,7 +31,7 @@ contract DeCentralScribeReceiver is
         address _paymentToken
     ) CCIPReceiver(router) {
         if (_target != address(0)) {
-            target = DeCentralScribe(_target); //new MediumAccess();
+            target = DeCentralScribe(_target);
         }
         paymentToken = _paymentToken;
     }
@@ -76,14 +72,11 @@ contract DeCentralScribeReceiver is
             amount,
             new bytes(0)
         );
+
     }
 
     function transferTokens(address beneficiary, uint256 amount) external {
         require(msg.sender == address(target), "Unauthorized");
         ERC20(paymentToken).transfer(beneficiary, amount);
-    }
-
-    function transferAndCall(to, amount, data) external override returns (bool) {
-        return IERC677(paymentToken).transferAndCall(to, amount, data);
     }
 }
