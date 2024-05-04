@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import { useEffect, useState } from "react";
 
@@ -43,7 +42,7 @@ export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
   // If not yet verified, render the IDKitWidget
   return (
     <IDKitWidget
-      app_id={process.env.NEXT_PUBLIC_WORLD_ID_APP_ID as `app_${string}`}
+      app_id={process.env.NEXT_PUBLIC_WORLD_APP_ID as `app_${string}`}
       action={process.env.NEXT_PUBLIC_WORLD_ID_ACTION_ID}
       signal={signal}
       onSuccess={(proofResult) => {
