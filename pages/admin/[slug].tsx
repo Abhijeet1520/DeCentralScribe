@@ -37,28 +37,33 @@ function PostManager() {
   const [post] = useDocumentData<PostType>(postRef);
 
   return (
-    <main className={styles.container}>
+    <main className="container mx-auto px-4">
       {post && (
-        <>
-          <section>
-            <h1>{post.title}</h1>
-            <p>ID: {post.slug}</p>
+        <div className="flex flex-wrap">
+          <section className="w-full lg:w-3/4 pr-4">
+            <h1 className="text-3xl font-bold">{post.title}</h1>
+            <p className="text-gray-600">ID: {post.slug}</p>
             <PostForm
               postRef={postRef}
               defaultValues={post}
               preview={preview}
             />
           </section>
-          <aside>
-            <h3>Tools</h3>
-            <button onClick={() => setPreview(!preview)}>
+          <aside className="w-full lg:w-1/4">
+            <h3 className="text-xl font-semibold mb-2 text-center">Tools</h3>
+            <button
+              className="btn-blue px-4 py-2 rounded-md mb-2 w-full"
+              onClick={() => setPreview(!preview)}
+            >
               {preview ? "Edit" : "Preview"}
             </button>
             <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue">Live view</button>
+              <button className="btn-blue px-4 py-2 rounded-md w-full">
+                Live View
+              </button>
             </Link>
           </aside>
-        </>
+        </div>
       )}
     </main>
   );
@@ -83,26 +88,27 @@ function PostForm({ defaultValues, postRef, preview }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(updatePost)}>
+    <form onSubmit={handleSubmit(updatePost)} className="mt-4">
       {preview && (
-        <div className="card">
+        <div className="card rounded-lg p-4 mb-4">
           <ReactMarkdown>{watch("content")}</ReactMarkdown>
         </div>
       )}
-      <div className={preview ? styles.hidden : styles.controls}>
+      <div className={preview ? "hidden" : ""}>
         <ImageUploader />
         <textarea
           name="content"
           ref={register({
-            maxLength: { value: 20000, message: "content is too long" },
-            minLength: { value: 10, message: "content is too short" },
-            required: { value: true, message: "content is required" },
+            maxLength: { value: 20000, message: "Content is too long" },
+            minLength: { value: 10, message: "Content is too short" },
+            required: { value: true, message: "Content is required" },
           })}
+          className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
         ></textarea>
         {errors.content && (
           <p className="text-danger">{errors.content.message}</p>
         )}
-        <fieldset>
+        <fieldset className="mb-4">
           <input
             className={styles.checkbox}
             name="published"
@@ -113,10 +119,12 @@ function PostForm({ defaultValues, postRef, preview }) {
         </fieldset>
         <button
           type="submit"
-          className="btn-green"
-          disabled={!isDirty || !isValid}
+          className={`btn-green px-4 py-2 rounded-md ${
+            (!isValid) && "opacity-50 cursor-not-allowed"
+          }`}
+          // disabled={!isDirty || !isValid}
         >
-          Save Changed
+          Save Changes
         </button>
       </div>
     </form>
