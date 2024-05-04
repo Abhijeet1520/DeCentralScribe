@@ -40,7 +40,7 @@ function PostItem({ post, admin }) {
         </span>
         <span className="text-red-500">❤️ {post.heartCount} Hearts</span>
       </footer>
-      <img src={post.imageUrl} alt="img" className="mt-4 w-full h-auto" />
+      <img src={`https://source.unsplash.com/random?cool-article-background`/*post.imageUrl*/} alt="img" className="mt-4 w-full h-auto" />
     </div>
   );
 }
