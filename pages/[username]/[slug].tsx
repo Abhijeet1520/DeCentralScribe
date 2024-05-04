@@ -6,7 +6,7 @@ import { AuthCheck, HeartButton, PostContent } from "../../components";
 import { firestore, getUserWithUsername, postToJSON } from "../../lib/firebase";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import styles from "../../styles/Post.module.css";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import Modal from "../../components/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -18,8 +18,11 @@ function PostPage() {
   const [post, setPost] = useState(null);
   const [postRef, setPostRef] = useState(null);
 
-  const pathname = useParams();
-  const { username, slug } = pathname;
+  const router = useRouter();
+  console.log(router,"router");
+
+  const username = router.query.username;
+  const slug = router.query.slug;
 
   const addr = "6cVCyRQhd2oZoVukbmngTuXSBtoogHR4NLsgQhydMU1R";
   const [metadatauri,setMetadatauri] = useState("");
@@ -126,7 +129,7 @@ function PostPage() {
         const post = postToJSON(await postRefTemp.get());
         setPost(post);
         // eslint-disable-next-line 
-        // @ts-expect-error
+
         setPostRef(postRefTemp);
       }
     };

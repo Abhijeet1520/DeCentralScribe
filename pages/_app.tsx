@@ -24,13 +24,6 @@ if (typeof window !== "undefined") {
             { name: "nullifier_hash", keypath: "nullifier_hash", options: { unique: false } },
           ],
         },
-      //   {
-      //     store: "referrals",
-      //     storeConfig: { keyPath: "id", autoIncrement: true },
-      //     storeSchema: [
-      //       { name: "code", keypath: "code", options: { unique: false } },
-      //     ],
-      //   },
       ],
     })
   })

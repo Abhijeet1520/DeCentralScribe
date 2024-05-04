@@ -1,5 +1,6 @@
 import { VerificationLevel, IDKitWidget } from "@worldcoin/idkit";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 // Define Props type
 type Props = {
@@ -13,28 +14,11 @@ type Props = {
 
 // Define the component
 export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
-  // Check if window is defined
+
   const isBrowser = typeof window !== 'undefined';
 
-  // Define state variable to track if the user has an entry in indexedDB
   const [hasEntry, setHasEntry] = useState(false);
 
-  useEffect(() => {
-    // Asynchronously import useIndexedDB hook
-    import("react-indexed-db-hook").then(({ useIndexedDB }) => {
-      // Use useIndexedDB hook directly inside the component
-      const db = isBrowser ? useIndexedDB('worldcoin') : null;
-
-      // Execute only in the browser environment
-      if (isBrowser && db) {
-        db.getAll().then((wc) => {
-          setHasEntry(wc.length > 0);
-        });
-      }
-    });
-  }, [isBrowser]);
-
-  // Conditional rendering based on whether the user has already verified
   if (hasEntry) {
     return <p>You have already verified with World ID</p>;
   }
@@ -49,16 +33,7 @@ export const WorldIdWidget = ({ signal, onProofGenerated }: Props) => {
         console.log("debug::onSuccess", JSON.stringify(proofResult));
         const { proof, merkle_root, nullifier_hash } = proofResult;
 
-        // Asynchronously import useIndexedDB hook
-        import("react-indexed-db-hook").then(({ useIndexedDB }) => {
-          // Use useIndexedDB hook directly inside the component
-          const db = isBrowser ? useIndexedDB('worldcoin') : null;
-
-          // Add the proof to indexedDB
-          if (isBrowser && db) {
-            db.add({ proof, merkle_root, nullifier_hash });
-          }
-        });
+        toast.success("Successfully verified with World ID");
       }}
       handleVerify={(proof) => {
         console.log("debug::handleVerify", JSON.stringify(proof));
