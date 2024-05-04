@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { FaHeart, FaCoins } from "react-icons/fa";
 import { FaGift } from "react-icons/fa6";
+import { GateFiSDK } from "@gatefi/js-sdk";
 
 interface IPost {
   heartCount?: number;
@@ -20,6 +21,7 @@ interface IPost {
 function PostPage() {
   const [post, setPost] = useState(null);
   const [postRef, setPostRef] = useState(null);
+  const [instance, setInstance] = useState(null);
 
   const router = useRouter();
   const username = router.query.username;
@@ -29,6 +31,7 @@ function PostPage() {
   console.log(showSupportModal,"showsupport")
 
   const toggleSupportModal = () => setShowSupportModal(!showSupportModal);
+
 
   async function mintSupportercNFT() {
     const Tags = post.tags;
@@ -57,10 +60,17 @@ function PostPage() {
     //   }
     // ],
     // "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
-  
+
   }
 
   console.log(username, slug)
+  useEffect(() => {
+    const instance = new GateFiSDK({
+      merchantId: process.env.NEXT_PUBLIC_UNLIMIT_MERCHANT_ID,
+      displayMode: "overlay",
+    });
+    setInstance(instance);
+  }, []);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -88,6 +98,9 @@ function PostPage() {
     return <div>Loading...</div>; // Or any other loading state
   }
 
+  function loadUnLimit() {
+    instance.show();
+  }
 
   return (
     <main className="flex flex-col items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 relative">
