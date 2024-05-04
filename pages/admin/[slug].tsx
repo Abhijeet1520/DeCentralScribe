@@ -60,30 +60,23 @@ function PostManager() {
 
 
   return (
-    <main className="container mx-auto px-4">
+    <main className={styles.container}>
       {post && (
-        <div className="flex flex-wrap">
-          <section className="w-full lg:w-3/4 pr-4">
-            <h1 className="text-3xl font-bold">{post.title}</h1>
-            <p className="text-gray-600">ID: {post.slug}</p>
-            <PostForm
-              postRef={postRef}
-              defaultValues={post}
-              preview={preview}
-            />
+        <>
+          <section>
+            <h1>{post.title}</h1>
+            <p>ID: {post.slug}</p>
+            
+            <PostForm postRef={postRef} defaultValues={post} preview={preview} tags={tags} setTags={setTags} />
           </section>
-          <aside className="w-full lg:w-1/4">
-            <h3 className="text-xl font-semibold mb-2 text-center">Tools</h3>
-            <button
-              className="btn-blue px-4 py-2 rounded-md mb-2 w-full"
-              onClick={() => setPreview(!preview)}
-            >
+          <aside>
+            <div className="card">
+            <h3>Tools</h3>
+            <button onClick={() => setPreview(!preview)} className="text-black text-xl bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900">
               {preview ? "Edit" : "Preview"}
             </button>
             <Link href={`/${post.username}/${post.slug}`}>
-              <button className="btn-blue px-4 py-2 rounded-md w-full">
-                Live View
-              </button>
+              <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-xl px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Live view</button>
             </Link>
             <label className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer">
               📸 Upload NFT Image
@@ -95,7 +88,7 @@ function PostManager() {
             </label>
             </div>
           </aside>
-        </div>
+        </>
       )}
     </main>
   );
@@ -109,10 +102,9 @@ function PostForm({ defaultValues, postRef, preview, tags, setTags }) {
 
   const { isValid, isDirty } = formState;
   const [imageUrl, setImageUrl] = useState(defaultValues.imageUrl || '');
+  
 
   const wallet = useActiveAccount();
-  const address = wallet?.address;
-
   const updatePost = async ({ content, published , description}: FormInputs) => {
     await postRef.update({
       content,
@@ -120,7 +112,7 @@ function PostForm({ defaultValues, postRef, preview, tags, setTags }) {
       published,
       imageUrl,
       updatedAt: serverTimestamp(),
-      address,
+      publicaddr: wallet?.address,
       tags
     });
     reset({ content, published , description, tags});
@@ -129,13 +121,13 @@ function PostForm({ defaultValues, postRef, preview, tags, setTags }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(updatePost)} className="mt-4">
+    <form onSubmit={handleSubmit(updatePost)}>
       {preview && (
-        <div className="card rounded-lg p-4 mb-4">
+        <div className="card">
           <ReactMarkdown>{watch("content")}</ReactMarkdown>
         </div>
       )}
-      <div className={preview ? "hidden" : ""}>
+      <div className={preview ? styles.hidden : styles.controls}>
         <ImageUploader />
         <input
           name="img"
@@ -181,18 +173,17 @@ function PostForm({ defaultValues, postRef, preview, tags, setTags }) {
         <textarea
           name="content"
           ref={register({
-            maxLength: { value: 20000, message: "Content is too long" },
-            minLength: { value: 10, message: "Content is too short" },
-            required: { value: true, message: "Content is required" },
+            maxLength: { value: 20000, message: "content is too long" },
+            minLength: { value: 10, message: "content is too short" },
+            required: { value: true, message: "content is required" },
           })}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 mb-4"
           placeholder="Write your post content here..."
         ></textarea>
 
         {errors.content && (
           <p className="text-danger">{errors.content.message}</p>
         )}
-        <fieldset className="mb-4">
+        <fieldset>
           <input
             className={styles.checkbox}
             name="published"
@@ -203,10 +194,7 @@ function PostForm({ defaultValues, postRef, preview, tags, setTags }) {
         </fieldset>
         <button
           type="submit"
-          className={`btn-green px-4 py-2 rounded-md ${
-            (!isValid) && "opacity-50 cursor-not-allowed"
-          }`}
-          // disabled={!isDirty || !isValid}
+          className="btn-green"
         >
           Save Changes
         </button>
