@@ -3,7 +3,7 @@ export default function Modal({ onClose, children }: any) {
         <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-50 flex justify-center items-center">
           <div className="relative p-8 bg-white w-full max-w-3xl m-auto flex-col flex rounded-lg shadow-lg">
           <h3 className="font-bold text-gray-800">
-          Support your creator cross-chain with SolQuill 🪶🚀
+            Support your creator cross-chain by donating using Chainlink CCIP🚀
         </h3>
             {children}
             <button onClick={onClose} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">

@@ -9,11 +9,13 @@ import "./AccessControl.sol";
 import "./IdTracker.sol";
 import "./TokenUtils.sol";
 
+// This is the main contract , supporters can mint tokens for articles in the form of ERC1155 tokens of those articles.
+
 contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, TokenUtils, AccessControl {
     uint256 constant MAX_ARTICLE_ID = 1 << (96 - 1);
 
     uint256 public mintPrice;
-    address public tokenReceiver;
+    address public tokenReceiver; // the address that can call mintErc20
 
     mapping(uint => bool) public tokensTracker;
 
@@ -24,7 +26,7 @@ contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, Tok
         uint256 _mintPrice,
         string memory uri_
     )
-        ERC1155(uri_) // "https://samplewebsite.org/api/{id}"
+        ERC1155(uri_)
         Ownable(initialOwner)
         AccessControl(accessController)
     {
@@ -60,18 +62,13 @@ contract DeCentralScribe is ERC1155, Ownable, DonationAggregator, IdTracker, Tok
     error ArticleIdNotExist(uint requested, uint maxAvailable);
     error NoArticlesByAuthor(address author);
 
-    /*
-        No need for amount, only minting one by one tbh
-        Also restrict to mint to self 
-
-    */
     function mintErc20(
         address minter,
         uint256 tokenId,
         uint256 paymentAmount,
         bytes calldata data
     ) external {
-        // only the CCIP receiver can call this
+        // only the CCIP receiver can call this after recievign payment
         if (msg.sender != tokenReceiver) {
             revert Unauthorized();
         }

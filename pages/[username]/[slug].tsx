@@ -60,7 +60,7 @@ function PostPage() {
       "royalty": 5,
       "creator": addr,
       "share": 100,
-      "external_url": `https://solquill.vercel.app/${post?.username}/${post?.slug}`,
+      "external_url": `https://decentral-scribe.vercel.app/${post?.username}/${post?.slug}`,
       "files": []
     });
 

@@ -9,7 +9,7 @@ import {IERC677Receiver} from "@chainlink/contracts-ccip/src/v0.8/shared/token/E
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-//import "./MediumAccess.sol";
+
 import "./DeCentralScribe.sol";
 import {IRelayTransferERC20} from "./Interfaces/IRelayTransferErc20.sol";
 
@@ -63,17 +63,6 @@ contract DeCentralScribeReceiver is
         emit MintCallSuccessfull();
     }
 
-    /*
-        Also could implement as a callback from the ERC20 instead of approval + transfer right? 
-        CCIP-BnM is an ERC677 token, which is a transferAndCall token
-        See on Sepolia: https://sepolia.etherscan.io/address/0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05#writeContract
-
-        transfer and call has the following signature:
-        function transferAndCall(address to, uint amount, bytes memory data) public returns (bool success) {
-        and "to" is the one called 
-
-        would be good to import IERC-677? 
-    */
     function onTokenTransfer(
         address sender,
         uint256 amount,
