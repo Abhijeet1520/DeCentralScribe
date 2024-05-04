@@ -19,8 +19,6 @@ function PostPage() {
   const [postRef, setPostRef] = useState(null);
 
   const router = useRouter();
-  console.log(router,"router");
-
   const username = router.query.username;
   const slug = router.query.slug;
 
